@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book</title>
+    <script>
+        const apiBaseUrl = "http://localhost:8080/api/contacts";
+
+        function addContact() {
+            const name = document.getElementById("contactName").value.trim();
+            const phone = document.getElementById("contactPhone").value.trim();
+
+            if (name && phone) {
+                fetch(`${apiBaseUrl}/add?name=${name}&phone=${phone}`, { method: "POST" })
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("output").innerText = data;
+                        document.getElementById("contactName").value = "";
+                        document.getElementById("contactPhone").value = "";
+                    });
+            } else {
+                alert("Please enter both name and phone number!");
+            }
+        }
+
+        function getContact() {
+            const name = document.getElementById("contactName").value.trim();
+
+            if (name) {
+                fetch(`${apiBaseUrl}/get?name=${name}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("output").innerText = data;
+                    });
+            } else {
+                alert("Please enter a name to retrieve the contact!");
+            }
+        }
+
+        function displayAllContacts() {
+            fetch(`${apiBaseUrl}/all`)
+                .then(response => response.json())
+                .then(data => {
+                    let output = "<h3>All Contacts:</h3><ul>";
+                    for (let [name, phone] of Object.entries(data)) {
+                        output += `<li><b>${name}</b>: ${phone}</li>`;
+                    }
+                    output += "</ul>";
+                    document.getElementById("output").innerHTML = output;
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Address Book</h1>
+    <div>
+        <label for="contactName">Contact Name:</label>
+        <input type="text" id="contactName" placeholder="Enter contact name"><br>
+        <label for="contactPhone">Phone Number:</label>
+        <input type="text" id="contactPhone" placeholder="Enter phone number"><br>
+        <button onclick="addContact()">Add Contact</button>
+        <button onclick="getContact()">Retrieve Contact</button>
+        <button onclick="displayAllContacts()">Display All Contacts</button>
+    </div>
+    <div id="output" style="margin-top: 20px;"></div>
+</body>
+</html>
