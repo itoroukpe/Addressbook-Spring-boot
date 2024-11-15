@@ -1,4 +1,4 @@
-# Addressbook-Spring-boot.md
+# Addressbook-Spring-boot
 To build the above web application using **Spring Boot**, we need to structure it into a backend API service and a frontend interface. Here's how it can be achieved:
 
 ---
